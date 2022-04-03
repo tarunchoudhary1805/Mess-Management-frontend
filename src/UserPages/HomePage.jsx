@@ -44,13 +44,22 @@ const HomePage = () => {
   ]);
   const [studentData, setStudentData] = useState([
     {
-      monthStart: "",
-      monthEnd: "",
-      extraDays: "",
+      monthStart: "01-01-2022",
+      monthEnd: "30-01-2022",
+      extraDays: "0",
       paymentStatus: true,
-      paidAmount: "",
-      remainingAmount: "",
-      modeOfPayment: "",
+      paidAmount: "2400",
+      remainingAmount: "0",
+      modeOfPayment: "Phone Pay",
+    },
+    {
+      monthStart: "31-01-2022",
+      monthEnd: "28-02-2022",
+      extraDays: "0",
+      paymentStatus: false,
+      paidAmount: "2200",
+      remainingAmount: "200",
+      modeOfPayment: "Google Pay",
     },
   ]);
   const day = new Date().getDay();
