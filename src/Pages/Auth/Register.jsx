@@ -99,7 +99,7 @@ const Register = () => {
                                 id="yourUsername"
                                 value={userData.contactNumber}
                                 onChange={handleChange}
-                                placeholder="Room Number i.e. A-1"
+                                placeholder="Contact Number"
                                 required
                               />
                             </div>

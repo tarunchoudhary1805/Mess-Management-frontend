@@ -140,6 +140,8 @@ const HomePage = () => {
                   <div class="card table-responsive">
                     <div class="card-body">
                       <h5 class="card-title">Student Details</h5>
+                      Name : {state.user.fullName} | Room Number :{" "}
+                      {state.user.roomNumber}
                       <table class="table ">
                         <thead>
                           <tr>
