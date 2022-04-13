@@ -1,7 +1,8 @@
 import React, { useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
-
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 import { register } from "../../redux/Auth/auth.actions";
 
 const Register = () => {
@@ -16,7 +17,7 @@ const Register = () => {
     department: "",
     email: "",
     password: "",
-    token: "12312",
+    userType: "Student",
   });
 
   const handleChange = (e) => {
@@ -24,10 +25,39 @@ const Register = () => {
     setUserData({ ...userData, [name]: value });
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     console.log(userData);
-    dispatch(register(userData));
+    const response = await fetch("http://localhost:8080/api/user/signup", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((data) => data.json())
+      .catch((err) => console.log(err));
+    console.log(response);
+    if (response.status == "ok") {
+      Toastify({
+        text: `${response.message}`,
+        className: "info",
+        close: true,
+        style: {
+          background: "green",
+        },
+      }).showToast();
+    } else {
+      Toastify({
+        text: `${response.error}`,
+        className: "info",
+        close: true,
+        style: {
+          background: "#eec0c6",
+        },
+      }).showToast();
+    }
+    dispatch({ type: "REGISTER", payload: response });
   };
   if (state.isAuthenticated) {
     return <Navigate replace to="/" />;

@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {state.token ? <Navbar /> : <Register />}
+        {state.token ? <Navbar /> : " "}
         <PrimaryRoute />
       </BrowserRouter>
     </div>

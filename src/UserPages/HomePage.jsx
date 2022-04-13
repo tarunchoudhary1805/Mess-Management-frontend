@@ -67,10 +67,11 @@ const HomePage = () => {
   console.log(day);
 
   if (!state.isAuthenticated) {
-    return <Navigate replace to="/login" />;
+    return <Navigate replace to="/register" />;
   } else {
     return (
       <div className="container">
+        
         <main id="main" className="main">
           <section className="section">
             <section class="section">

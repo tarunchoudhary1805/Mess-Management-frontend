@@ -2,9 +2,9 @@ import React, { useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 
-const Feedback = () => {
+const ExtraDays = () => {
   const [userData, setUserData] = useState({
-    title: "",
+    extraDays: "",
     description: "",
   });
 
@@ -40,22 +40,24 @@ const Feedback = () => {
                     <div class="card-body">
                       <div class="pt-4 pb-2">
                         <h5 class="card-title text-center pb-0 fs-4">
-                          FEEDBACK FORM
+                          Extra Days Entry
                         </h5>
-                        <p class="text-center small">Provide your feedback.</p>
+                        <p class="text-center small">
+                          fill details for Extra Days.
+                        </p>
                       </div>
 
                       <form class="row g-3 needs-validation" novalidate>
                         <div class="col-12">
                           <div class="input-group has-validation">
                             <input
-                              type="text"
-                              name="title"
+                              type="number"
+                              name="extraDays"
                               class="form-control"
                               id="yourUsername"
-                              value={userData.title}
+                              value={userData.extraDays}
                               onChange={handleChange}
-                              placeholder="Enter the Title"
+                              placeholder="Extra Days"
                               required
                             />
                           </div>
@@ -83,7 +85,7 @@ const Feedback = () => {
                             onClick={submit}
                             type="submit"
                           >
-                            Submit Feedback Form
+                            Submit
                           </button>
                         </div>
                       </form>
@@ -99,4 +101,4 @@ const Feedback = () => {
   );
 };
 
-export default Feedback;
+export default ExtraDays;

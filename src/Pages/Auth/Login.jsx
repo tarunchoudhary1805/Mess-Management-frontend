@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/Auth/auth.actions";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -14,10 +16,39 @@ const Login = () => {
     setUserData({ ...userData, [name]: value });
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    console.log(userData);
-    dispatch(login(userData));
+
+    const response = await fetch("http://localhost:8080/api/user/signin", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((data) => data.json())
+      .catch((err) => console.log(err));
+    console.log(response);
+    if (response.status == "ok") {
+      Toastify({
+        text: `${response.message}`,
+        className: "info",
+        close: true,
+        style: {
+          background: "green",
+        },
+      }).showToast();
+    } else {
+      Toastify({
+        text: `${response.error}`,
+        className: "info",
+        close: true,
+        style: {
+          background: "red",
+        },
+      }).showToast();
+    }
+    dispatch({ type: "LOGIN", payload: response });
   };
 
   if (state.isAuthenticated) {

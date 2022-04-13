@@ -10,6 +10,7 @@ import Register from "../Pages/Auth/Register";
 import About from "../UserPages/About";
 import Feedback from "../UserPages/Feedback";
 import Payment from "../UserPages/Payment";
+import ExtraDays from "../UserPages/ExtraDays";
 
 const PrimaryRoute = () => {
   return (
@@ -24,6 +25,7 @@ const PrimaryRoute = () => {
       <Route path="/about" element={<About />} />
       <Route path="/feedback" element={<Feedback />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/extraDays" element={<ExtraDays />} />
     </Routes>
   );
 };
