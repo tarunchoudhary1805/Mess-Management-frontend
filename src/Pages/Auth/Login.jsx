@@ -5,6 +5,10 @@ import { login } from "../../redux/Auth/auth.actions";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 
+import { api } from "../../config";
+
+const endpoint = api.endPoint;
+
 const Login = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.authReducer);
@@ -19,7 +23,7 @@ const Login = () => {
   const submit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8080/api/user/signin", {
+    const response = await fetch(`${endpoint}/api/user/signin`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

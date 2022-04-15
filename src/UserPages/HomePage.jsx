@@ -71,7 +71,6 @@ const HomePage = () => {
   } else {
     return (
       <div className="container">
-        
         <main id="main" className="main">
           <section className="section">
             <section class="section">

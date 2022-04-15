@@ -4,7 +4,7 @@ import { LOGIN, LOGOUT, REGISTER, LOAD_USER } from "./auth.types";
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: localStorage.getItem("isAuthenticated"),
-  user: localStorage.getItem("user"),
+  user: JSON.parse(localStorage.getItem("user")),
 };
 console.log(initialState);
 const reducer = (state = initialState, action) => {

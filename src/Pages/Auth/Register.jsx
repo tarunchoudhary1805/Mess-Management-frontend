@@ -4,6 +4,9 @@ import { Link, Navigate } from "react-router-dom";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import { register } from "../../redux/Auth/auth.actions";
+import { api } from "../../config";
+
+const endpoint = api.endPoint;
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -28,7 +31,7 @@ const Register = () => {
   const submit = async (e) => {
     e.preventDefault();
     console.log(userData);
-    const response = await fetch("http://localhost:8080/api/user/signup", {
+    const response = await fetch(`${endpoint}/api/user/signup`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
