@@ -12,6 +12,8 @@ import Feedback from "../UserPages/Feedback";
 import Payment from "../UserPages/Payment";
 import ExtraDays from "../UserPages/ExtraDays";
 import FeedbackList from "../Pages/Feedback/FeedbackList";
+import Menu from "../Pages/Menu/Menu";
+import MoreDetails from "../Pages/Students/MoreDetails";
 
 const PrimaryRoute = () => {
   return (
@@ -28,6 +30,8 @@ const PrimaryRoute = () => {
       <Route path="/feedbackList" element={<FeedbackList />} />
       <Route path="/payment" element={<Payment />} />
       <Route path="/extraDays" element={<ExtraDays />} />
+      <Route path="/menu" element={<Menu />} />
+      <Route path="/moreDetails" element={<MoreDetails />} />
     </Routes>
   );
 };

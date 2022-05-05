@@ -15,6 +15,7 @@ const Students = () => {
   console.log(state1);
   const [data, setData] = useState(state.list);
   console.log(data);
+
   useEffect(() => {
     (async () => {
       const response = await fetch(`${endpoint}/api/user/getAllUsers`, {
@@ -72,7 +73,7 @@ const Students = () => {
                           <th scope="col">#</th>
                           <th scope="col">Name</th>
                           <th scope="col">Room Number</th>
-                          <th scope="col">Account Status</th>
+                          {/* <th scope="col">Account Status</th> */}
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -82,20 +83,10 @@ const Students = () => {
                             <th scope="row">{x + 1}</th>
                             <td>{item.fullName}</td>
                             <td>{item.roomNumber}</td>
-                            <td>
-                              {item.accountStatus === "Active" ? (
-                                <button className="btn btn-success">
-                                  Active
-                                </button>
-                              ) : (
-                                <button className="btn btn-danger">
-                                  Inactive
-                                </button>
-                              )}
-                            </td>
+
                             <td>
                               <button className="btn btn-secondary">
-                                View More
+                                <Link to="/moreDetails">View More</Link>
                               </button>
                             </td>
                           </tr>

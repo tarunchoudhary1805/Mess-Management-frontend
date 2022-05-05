@@ -10,17 +10,21 @@ const endpoint = api.endPoint;
 const Income = () => {
   const dispatch = useDispatch();
   const state1 = useSelector((state) => state.authReducer);
-  console.log(state1);
+  const statex = useSelector((state) => state.adminReducer);
+  // console.log(statex);
   const [state, setState] = useState({
-    name: "",
+    description: "",
     amount: "",
-    modeofpayment: "",
-    dateofpayment: "",
+    modeOfPayment: "",
+    dateOfPayment: "",
   });
 
+  const [resData, setResData] = useState(statex.income);
+
+  console.log(resData);
   useEffect(() => {
     (async () => {
-      const response = await fetch(`${endpoint}/api/user/getAllUsers`, {
+      const response = await fetch(`${endpoint}/api/admin/getIncome`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${state1.token}`,
@@ -28,8 +32,9 @@ const Income = () => {
       })
         .then((data) => data.json())
         .catch((err) => console.log(err));
-      console.log(response);
+      console.log(response.data);
       // setData(response.users);
+      setResData(response.data);
       if (response.status == "ok") {
         Toastify({
           text: `${response.message}`,
@@ -49,11 +54,73 @@ const Income = () => {
           },
         }).showToast();
       }
-      dispatch({ type: "GET_STUDENT_LIST", payload: response });
+      dispatch({ type: "GET_INCOME", payload: response.data });
     })();
   }, []);
 
-  if (!state.isAuthenticated) {
+  const submit = async (e) => {
+    if (
+      !state.description ||
+      !state.amount ||
+      !state.dateOfPayment ||
+      !state.modeOfPayment
+    )
+      return Toastify({
+        text: `All Fields are required`,
+        className: "info",
+        close: true,
+        style: {
+          background: "red",
+        },
+      }).showToast();
+    e.preventDefault();
+
+    const response = await fetch(`${endpoint}/api/admin/addIncome`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${state1.token}`,
+      },
+      body: JSON.stringify(state),
+    })
+      .then((data) => data.json())
+      .catch((err) => console.log(err));
+    console.log(response.response);
+
+    if (response.status == "ok") {
+      let x = [...resData];
+      x.push(response.response);
+      setResData(x);
+      // setResData(response.response);
+      Toastify({
+        text: `${response.message}`,
+        className: "info",
+        close: true,
+        style: {
+          background: "green",
+        },
+      }).showToast();
+    } else {
+      Toastify({
+        text: `${response.error}`,
+        className: "info",
+        close: true,
+        style: {
+          background: "red",
+        },
+      }).showToast();
+    }
+    dispatch({ type: "ADD_EXPENSE", payload: resData });
+
+    // console.log("resssssssssss ", resData);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+
+  if (!state1.isAuthenticated) {
     return <Navigate replace to="/" />;
   } else {
     return (
@@ -103,15 +170,21 @@ const Income = () => {
                                     type="text"
                                     className="form-control"
                                     id="inputNanme4"
+                                    name="description"
+                                    onChange={handleChange}
+                                    value={state.description}
                                     placeholder="Name / Description"
                                   />
                                 </div>
                                 <div className="col-12">
                                   <input
                                     type="number"
+                                    name="amount"
                                     className="form-control"
                                     id="inputEmail4"
                                     placeholder="Amount"
+                                    onChange={handleChange}
+                                    value={state.amount}
                                   />
                                 </div>
                                 <div className="col-12">
@@ -119,6 +192,9 @@ const Income = () => {
                                     type="text"
                                     className="form-control"
                                     id="inputPassword4"
+                                    name="modeOfPayment"
+                                    onChange={handleChange}
+                                    value={state.modeOfPayment}
                                     placeholder="Mode Of Payment"
                                   />
                                 </div>
@@ -131,26 +207,13 @@ const Income = () => {
                                   </label>
                                   <input
                                     type="date"
+                                    onChange={handleChange}
+                                    name="dateOfPayment"
+                                    value={state.dateOfPayment}
                                     className="form-control"
                                     id="inputAddress"
                                     placeholder="Date"
                                   />
-                                </div>
-                                <div className="col-12 ">
-                                  <div>
-                                    <label
-                                      for="inputNanme4"
-                                      className="form-label d-flex"
-                                    >
-                                      Start Date
-                                    </label>
-                                    <input
-                                      type="date"
-                                      className="form-control"
-                                      id="inputAddress"
-                                      placeholder="Start Date"
-                                    />
-                                  </div>
                                 </div>
                               </form>
                             </div>
@@ -163,7 +226,12 @@ const Income = () => {
                             >
                               Cancel
                             </button>
-                            <button type="button" className="btn btn-success">
+                            <button
+                              type="button"
+                              onClick={submit}
+                              data-bs-dismiss="modal"
+                              className="btn btn-success"
+                            >
                               Save
                             </button>
                           </div>
@@ -182,13 +250,15 @@ const Income = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Tarun Choudhary</td>
-                          <td>2400</td>
-                          <td>Online</td>
-                          <td>2016-05-25</td>
-                        </tr>
+                        {resData?.map((item, x) => (
+                          <tr>
+                            <th scope="row">{x + 1}</th>
+                            <td>{item.description}</td>
+                            <td>{item.amount}</td>
+                            <td>{item.modeOfPayment}</td>
+                            <td>{item.dateOfPayment}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>

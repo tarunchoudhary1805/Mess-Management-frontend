@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 const HomePage = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.authReducer);
+  console.log(state);
   const [menu, setMenu] = useState([
     {
       day: "SUNDAY",
@@ -141,7 +142,7 @@ const HomePage = () => {
                     <div class="card-body">
                       <h5 class="card-title">Student Details</h5>
                       Name : {state.user.fullName} | Room Number :{" "}
-                      {state.user.roomNumber}
+                      {state.user.roomNumber} <br />
                       <table class="table ">
                         <thead>
                           <tr>

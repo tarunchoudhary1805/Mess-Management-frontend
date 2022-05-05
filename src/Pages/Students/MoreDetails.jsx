@@ -1,129 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
-import Toastify from "toastify-js";
-import "toastify-js/src/toastify.css";
-import { api } from "../../config";
+import React, { useState } from "react";
 
-const endpoint = api.endPoint;
-
-const Expense = () => {
-  const dispatch = useDispatch();
-  const state1 = useSelector((state) => state.authReducer);
-  const state = useSelector((state) => state.adminReducer);
-  // console.log(state1);
-  // console.log(state);
+const MoreDetails = () => {
   const [data, setData] = useState({
-    description: "",
-    amount: "",
-    modeOfPayment: "",
+    monthStart: "",
+    monthEnd: "",
+    extraDays: "",
+    amountPaid: "",
+    amountRemaining: "",
     dateOfPayment: "",
+    meal: "",
   });
-
-  const [resData, setResData] = useState(state.expense);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(`${endpoint}/api/admin/getExpense`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${state1.token}`,
-        },
-      })
-        .then((data) => data.json())
-        .catch((err) => console.log(err));
-      // console.log(response.data);
-      setResData(response.data);
-      if (response.status == "ok") {
-        Toastify({
-          text: `${response.message}`,
-          className: "info",
-          close: true,
-          style: {
-            background: "green",
-          },
-        }).showToast();
-      } else {
-        Toastify({
-          text: `${response.error}`,
-          className: "info",
-          close: true,
-          style: {
-            background: "red",
-          },
-        }).showToast();
-      }
-      dispatch({ type: "GET_EXPENSE", payload: response.data });
-    })();
-  }, []);
-
-  const submit = async (e) => {
-    if (
-      !data.description ||
-      !data.amount ||
-      !data.dateOfPayment ||
-      !data.modeOfPayment
-    )
-      return Toastify({
-        text: `All Fields are required`,
-        className: "info",
-        close: true,
-        style: {
-          background: "red",
-        },
-      }).showToast();
-    e.preventDefault();
-
-    const response = await fetch(`${endpoint}/api/admin/addExpense`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${state1.token}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((data) => data.json())
-      .catch((err) => console.log(err));
-    console.log(response.response);
-
-    if (response.status == "ok") {
-      let x = [...resData];
-      x.push(response.response);
-      setResData(x);
-      // setResData(response.response);
-      Toastify({
-        text: `${response.message}`,
-        className: "info",
-        close: true,
-        style: {
-          background: "green",
-        },
-      }).showToast();
-    } else {
-      Toastify({
-        text: `${response.error}`,
-        className: "info",
-        close: true,
-        style: {
-          background: "red",
-        },
-      }).showToast();
-    }
-    dispatch({ type: "ADD_EXPENSE", payload: resData });
-
-    // console.log("resssssssssss ", resData);
+  const submit = () => {
+    let now = new Date(data.monthStart);
+    console.log(now);
+    console.log("Today: " + now.toUTCString());
+    let next30days = new Date(now.setDate(now.getDate() + 30));
+    console.log("Next 30th day: " + next30days.toUTCString());
+    data.monthStart = new Date(data.monthStart).toUTCString();
+    data.monthEnd = next30days.toUTCString();
+    setData(data);
+    console.log(data);
   };
-  console.log("resssssssssss ", resData);
 
-  if (!state1.isAuthenticated) {
-    return <Navigate replace to="/" />;
-  } else {
-    return (
+  return (
+    <div>
       <div className="container">
         <main id="main" className="main">
           <section className="section">
@@ -135,11 +41,11 @@ const Expense = () => {
                       {" "}
                       <button
                         type="button"
-                        className="btn btn-danger rounded-pill"
+                        className="btn btn-success rounded-pill"
                         data-bs-toggle="modal"
                         data-bs-target="#disablebackdrop"
                       >
-                        + Add Expense
+                        + Add Entry
                       </button>
                     </div>
                     {/* modal */}
@@ -153,7 +59,7 @@ const Expense = () => {
                         <div className="modal-content">
                           <div className="modal-header">
                             <h5 className="modal-title text-success ">
-                              Add Expense
+                              Add Entry
                             </h5>
                             <button
                               type="button"
@@ -167,34 +73,56 @@ const Expense = () => {
                               <form className="row g-3">
                                 <div className="col-12">
                                   <input
-                                    type="text"
-                                    name="description"
-                                    value={data.description}
+                                    type="date"
                                     className="form-control"
                                     id="inputNanme4"
+                                    name="monthStart"
                                     onChange={handleChange}
-                                    placeholder="Name / Description"
+                                    value={data.description}
+                                    placeholder="Month Start"
                                   />
                                 </div>
                                 <div className="col-12">
                                   <input
                                     type="number"
                                     className="form-control"
+                                    id="inputNanme4"
+                                    name="meal"
+                                    onChange={handleChange}
+                                    value={data.meal}
+                                    placeholder="1/2 time"
+                                  />
+                                </div>
+                                <div className="col-12">
+                                  <input
+                                    type="number"
+                                    name="amountPaid"
+                                    className="form-control"
                                     id="inputEmail4"
-                                    name="amount"
+                                    placeholder="Amount Paid"
                                     onChange={handleChange}
                                     value={data.amount}
-                                    placeholder="Amount"
                                   />
                                 </div>
                                 <div className="col-12">
                                   <input
                                     type="text"
-                                    name="modeOfPayment"
-                                    value={data.modeOfPayment}
                                     className="form-control"
                                     id="inputPassword4"
+                                    name="amountRemaining"
                                     onChange={handleChange}
+                                    value={data.modeOfPayment}
+                                    placeholder="Amount Remaining"
+                                  />
+                                </div>
+                                <div className="col-12">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="inputPassword4"
+                                    name="modeOfPayment"
+                                    onChange={handleChange}
+                                    value={data.modeOfPayment}
                                     placeholder="Mode Of Payment"
                                   />
                                 </div>
@@ -207,9 +135,9 @@ const Expense = () => {
                                   </label>
                                   <input
                                     type="date"
-                                    value={data.dateOfPayment}
-                                    name="dateOfPayment"
                                     onChange={handleChange}
+                                    name="dateOfPayment"
+                                    value={data.dateOfPayment}
                                     className="form-control"
                                     id="inputAddress"
                                     placeholder="Date"
@@ -238,34 +166,22 @@ const Expense = () => {
                         </div>
                       </div>
                     </div>
-                    <h5 className="card-title">Expense</h5>
+                    <h5 className="card-title">Entry</h5>
                     <table className="table datatable">
                       <thead>
                         <tr>
                           <th scope="col">#</th>
-                          <th scope="col">Name/Description</th>
-                          <th scope="col">Amount</th>
+                          <th scope="col">Month Start</th>
+                          <th scope="col">Month End</th>
+                          <th scope="col">Leave</th>
+                          <th scope="col">Amount Paid</th>
+                          <th scope="col">Amount remaining</th>
                           <th scope="col">Mode of Payment</th>
                           <th scope="col">Date of Payment</th>
+                          <th scope="col"></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {resData?.length > 0 ? (
-                          <>
-                            {resData?.map((item, i) => (
-                              <tr key={item._id}>
-                                <td>{i + 1}</td>
-                                <td>{item.description}</td>
-                                <td>{item.amount}</td>
-                                <td>{item.modeOfPayment}</td>
-                                <td>{item.dateOfPayment}</td>
-                              </tr>
-                            ))}
-                          </>
-                        ) : (
-                          <p className="text-center">No </p>
-                        )}
-                      </tbody>
+                      <tbody></tbody>
                     </table>
                   </div>
                 </div>
@@ -274,8 +190,8 @@ const Expense = () => {
           </section>
         </main>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
-export default Expense;
+export default MoreDetails;

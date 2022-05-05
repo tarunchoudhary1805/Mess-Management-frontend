@@ -3,12 +3,15 @@ import {
   GET_EXPENSE,
   ADD_EXPENSE,
   GET_FEEDBACK,
+  GET_INCOME,
+  ADD_INCOME,
 } from "./admin.types";
 
 const initialState = {
   list: [],
   expense: [],
   feedbacks: [],
+  income: [],
 };
 console.log(initialState);
 const Adminreducer = (state = initialState, action) => {
@@ -28,6 +31,13 @@ const Adminreducer = (state = initialState, action) => {
       return {
         ...state,
         feedbacks: action.payload,
+      };
+
+    case GET_INCOME:
+    case ADD_INCOME:
+      return {
+        ...state,
+        income: action.payload,
       };
 
     default:

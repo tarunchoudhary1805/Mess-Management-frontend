@@ -8,6 +8,7 @@ import "toastify-js/src/toastify.css";
 import { api } from "../../config";
 
 const endpoint = api.endPoint;
+console.log(endpoint);
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Login = () => {
 
   const submit = async (e) => {
     e.preventDefault();
-
+    console.log(endpoint);
     const response = await fetch(`${endpoint}/api/user/signin`, {
       method: "POST",
       headers: {

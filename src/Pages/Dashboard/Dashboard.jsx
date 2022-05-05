@@ -12,7 +12,9 @@ const Dashboard = () => {
   console.log(state);
   console.log(state1);
   let exp = 0;
+  let exp1 = 0;
   const [expense, setExpense] = useState(exp);
+  const [income, setIncome] = useState(exp1);
 
   useEffect(() => {
     (async () => {
@@ -31,11 +33,33 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      const response = await fetch(`${endpoint}/api/admin/getIncome`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      })
+        .then((data) => data.json())
+        .catch((err) => console.log(err));
+      console.log(response.data);
+
+      dispatch({ type: "GET_INCOME", payload: response.data });
+    })();
+  }, []);
+
+  useEffect(() => {
     for (let index = 0; index < state1.expense.length; index++) {
-      let element = state1.expense[index].amount;
-      exp += element;
+      let element1 = state1.expense[index].amount;
+      exp += element1;
     }
     setExpense(exp);
+    console.log(exp);
+    for (let index = 0; index < state1.income.length; index++) {
+      let element = state1.income[index].amount;
+      exp1 += element;
+    }
+    setIncome(exp1);
   });
 
   if (!state.isAuthenticated) {
@@ -81,7 +105,7 @@ const Dashboard = () => {
 
                         <div class="d-flex align-items-center">
                           <div class="">
-                            <h6 className="text-success">Rs. 12112</h6>
+                            <h6 className="text-success">Rs. {income}</h6>
                             <br />
 
                             <Link
@@ -137,7 +161,28 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+
+                  <div class="col-xxl-4 col-md-6 ">
+                    <div class="card info-card align-items-center revenue-card">
+                      <div class="card-body">
+                        <h5 class="card-title">Menu</h5>
+
+                        <div class="d-flex align-items-center">
+                          <div class="">
+                            <p className="text-danger">Check and Update Menu</p>
+
+                            <Link
+                              to="/menu"
+                              className=" btn btn-success text-white"
+                            >
+                              Open
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>{" "}
                 {/* <div class="col-xxl-4 col-md-6">
                   <div class="card info-card align-items-center revenue-card">
                     <div class="card-body">

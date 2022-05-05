@@ -95,7 +95,7 @@ const Navbar = () => {
                 className="dropdown-item d-flex align-items-center"
                 href="#"
               >
-                <i className="bi bi-box-arrow-right"></i>
+                <i className="bi bi-box-arrow-right"></i> &nbsp;
                 <span>Sign Out</span>
               </a>
             </li>
