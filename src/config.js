@@ -1,4 +1,4 @@
 export const api = {
-  // endPoint: "https://mess-management-api.herokuapp.com",
-  endPoint: "http://localhost:8080",
+  endPoint: "https://mess-management-rnth.onrender.com", // cloud hoisted
+  // endPoint: "http://localhost:8080", // local
 };
