@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import Loader from "../Components/Loader/Loader";
 import { api } from "../config";
 
 const endpoint = api.endPoint;
@@ -13,6 +14,7 @@ const Feedback = () => {
   const state1 = useSelector((state) => state.authReducer);
   const state = useSelector((state) => state.adminReducer);
 
+  const [loading, setLoading] = useState(false);
   console.log(state);
   const [userData, setUserData] = useState({
     title: "",
@@ -27,8 +29,10 @@ const Feedback = () => {
   const submit = async (e) => {
     e.preventDefault();
     console.log(userData);
+    setLoading(true);
 
-    if (!userData.description || !userData.title)
+    if (!userData.description || !userData.title) {
+      setLoading(false);
       return Toastify({
         text: `All Fields are required`,
         className: "info",
@@ -37,6 +41,7 @@ const Feedback = () => {
           background: "red",
         },
       }).showToast();
+    }
     e.preventDefault();
 
     const response = await fetch(`${endpoint}/api/feedback/addFeedback`, {
@@ -73,6 +78,7 @@ const Feedback = () => {
     dispatch({ type: "ADD_FEEDBACK", payload: response.data });
     setUserData({ title: "", description: "" });
     // dispatch(register(userData));
+    setLoading(false);
   };
 
   if (!state1.isAuthenticated) {
@@ -145,7 +151,7 @@ const Feedback = () => {
                               onClick={submit}
                               type="submit"
                             >
-                              Submit Feedback Form
+                              {loading ? <Loader /> : "Submit Feedback Form"}
                             </button>
                           </div>
                         </form>
