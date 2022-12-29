@@ -12,6 +12,7 @@ const FeedbackList = () => {
   const state1 = useSelector((state) => state.adminReducer);
   console.log(state);
   const [loading, setLoading] = useState(false);
+
   console.log(state1);
   const [feedbackby, setFeedbackBy] = useState();
 
@@ -31,6 +32,23 @@ const FeedbackList = () => {
       dispatch({ type: "GET_FEEDBACK", payload: response.response });
     })();
   }, []);
+
+  const deleteFeedback = async (id) => {
+    const response = await fetch(
+      `${endpoint}/api/feedback/deleteFeedback/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      }
+    )
+      .then((data) => data.json())
+      .catch((err) => console.log(err));
+    console.log(response.data);
+    setLoading(false);
+    dispatch({ type: "DELETE_FEEDBACK", payload: response.data });
+  };
 
   if (!state.isAuthenticated) {
     return <Navigate replace to="/" />;
@@ -55,8 +73,9 @@ const FeedbackList = () => {
                               <th scope="col">#</th>
                               <th scope="col">Name</th>
                               <th scope="col">Room Number</th>
-                              <th scope="col">Title</th>
-                              <th scope="col">Description</th>
+                              {/* <th scope="col">Title</th>
+                              <th scope="col">Description</th> */}
+                              <th scope="col">Read</th>
                               <th scope="col"></th>
                             </tr>
                           </thead>
@@ -66,8 +85,8 @@ const FeedbackList = () => {
                                 <th scope="row">{x + 1}</th>
                                 <td>{item.postedBy.fullName}</td>
                                 <td>{item.postedBy.roomNumber}</td>
-                                <td>{item.title}</td>
-                                <td>{item.description}</td>
+                                {/* <td>{item.title}</td>
+                                <td>{item.description}</td> */}
                                 <td>
                                   <button
                                     type="button"
@@ -76,7 +95,18 @@ const FeedbackList = () => {
                                     data-bs-target="#disablebackdrop"
                                     onClick={() => setFeedbackBy(item)}
                                   >
-                                    Open
+                                    Read
+                                  </button>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger rounded-pill"
+                                    // data-bs-toggle="modal"
+                                    // data-bs-target="#disablebackdrop"
+                                    onClick={() => deleteFeedback(item._id)}
+                                  >
+                                    Delete
                                   </button>
                                 </td>
                               </tr>

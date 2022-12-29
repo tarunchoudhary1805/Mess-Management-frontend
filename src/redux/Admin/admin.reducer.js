@@ -5,6 +5,7 @@ import {
   GET_FEEDBACK,
   GET_INCOME,
   ADD_INCOME,
+  DELETE_FEEDBACK,
 } from "./admin.types";
 
 const initialState = {
@@ -32,7 +33,11 @@ const Adminreducer = (state = initialState, action) => {
         ...state,
         feedbacks: action.payload,
       };
-
+    case DELETE_FEEDBACK:
+      return {
+        ...state,
+        feedbacks: action.payload,
+      };
     case GET_INCOME:
     case ADD_INCOME:
       return {
