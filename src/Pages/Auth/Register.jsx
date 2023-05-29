@@ -5,10 +5,12 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import { register } from "../../redux/Auth/auth.actions";
 import { api } from "../../config";
+import Loader from "../../Components/Loader/Loader";
 
 const endpoint = api.endPoint;
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const state = useSelector((state) => state.authReducer);
   console.log(state);
@@ -31,6 +33,7 @@ const Register = () => {
   const submit = async (e) => {
     e.preventDefault();
     console.log(userData);
+    setLoading(true);
     const response = await fetch(`${endpoint}/api/user/signup`, {
       method: "POST",
       headers: {
@@ -50,6 +53,7 @@ const Register = () => {
           background: "green",
         },
       }).showToast();
+      setLoading(false);
     } else {
       Toastify({
         text: `${response.error}`,
@@ -60,6 +64,7 @@ const Register = () => {
         },
       }).showToast();
     }
+    setLoading(false);
     dispatch({ type: "REGISTER", payload: response });
   };
   if (state.isAuthenticated) {
@@ -185,7 +190,7 @@ const Register = () => {
                               onClick={submit}
                               type="submit"
                             >
-                              Login
+                              {loading ? <Loader /> : "Register"}
                             </button>
                           </div>
                           <div class="col-12">

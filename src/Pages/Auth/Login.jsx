@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/Auth/auth.actions";
 import Toastify from "toastify-js";
+import Loader from "../../Components/Loader/Loader";
 import "toastify-js/src/toastify.css";
 
 import { api } from "../../config";
@@ -14,6 +15,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.authReducer);
   console.log(state);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
@@ -24,6 +26,7 @@ const Login = () => {
   const submit = async (e) => {
     e.preventDefault();
     console.log(endpoint);
+    setLoading(true);
     const response = await fetch(`${endpoint}/api/user/signin`, {
       method: "POST",
       headers: {
@@ -35,6 +38,7 @@ const Login = () => {
       .catch((err) => console.log(err));
     console.log(response);
     if (response.status == "ok") {
+      setLoading(false);
       Toastify({
         text: `${response.message}`,
         className: "info",
@@ -54,6 +58,7 @@ const Login = () => {
       }).showToast();
     }
     dispatch({ type: "LOGIN", payload: response });
+    setLoading(false);
   };
 
   if (state.isAuthenticated) {
@@ -122,7 +127,7 @@ const Login = () => {
                             onClick={submit}
                             type="submit"
                           >
-                            Login
+                            {loading ? <Loader /> : "Login"}
                           </button>
                         </div>
                         <div class="col-12">
